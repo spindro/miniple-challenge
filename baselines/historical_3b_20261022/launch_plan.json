@@ -1,0 +1,17 @@
+{
+  "budget_tokens_requested": 3000000000,
+  "budget_tokens_scheduled": 2999910400,
+  "gpu": 0,
+  "warmup_tokens": 10000000,
+  "mix_start_tokens_requested": 1500000000,
+  "cooldown_start_tokens_requested": 2100000000,
+  "decay_tokens_requested": 900000000,
+  "muon_lr": 0.0008,
+  "adamw_lr": 0.0006,
+  "micro_batch": 20,
+  "grad_accum": 4,
+  "seq_len": 2048,
+  "seed": 1337,
+  "data_dir": "/media/nvme/spindro/miniple_6b/data/ultrafineweb_3b_v2_20261022",
+  "validation_file": "/media/nvme/spindro/miniple_6b/data/ultrafineweb_6b_decay20/val_l2.bin"
+}

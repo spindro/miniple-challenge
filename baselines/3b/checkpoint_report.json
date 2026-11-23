@@ -1,0 +1,79 @@
+{
+  "checkpoint": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/runs/assignment_baseline_3b_20261119/final_l3_mix.pt",
+  "completed_steps": 18310,
+  "training_tokens": 2999910400,
+  "parameters": 146496016,
+  "schedule": {
+    "data_fingerprint": "4a82930e7bf492ed1b3e01e7d20327c010858821fb4c4404cf19296fda34f16c",
+    "micro_batch": 20,
+    "grad_accum": 4,
+    "seq_len": 2048,
+    "tokens_per_step": 163840,
+    "stage1_steps": 12817,
+    "decay_steps": 5493,
+    "mix_start_steps": 9155,
+    "mix_start_scheduled_tokens": 1499955200,
+    "total_steps": 18310,
+    "stage1_scheduled_tokens": 2099937280,
+    "decay_scheduled_tokens": 899973120,
+    "total_scheduled_tokens": 2999910400,
+    "warmup_tokens_requested": 10000000,
+    "warmup_steps": 62,
+    "warmup_scheduled_tokens": 10158080,
+    "lr": 0.0006,
+    "sampled_softmax": "pr360",
+    "full_softmax_at_decay": true,
+    "data_mix_patterns": {
+      "stable": [
+        "l2",
+        "l2",
+        "l2",
+        "qa",
+        "l2",
+        "l2",
+        "l2",
+        "style"
+      ],
+      "cooldown": [
+        "l2",
+        "l2",
+        "qa",
+        "style"
+      ]
+    },
+    "decay_data": "l3_mix",
+    "decay_required_tokens": {
+      "stage1_l2.bin": 1499955200,
+      "decay_l2.bin": 899973120,
+      "decay_l3_qa.bin": 299991040,
+      "decay_l3_style.bin": 299991040
+    },
+    "dtype": "torch.bfloat16"
+  },
+  "model_config": {
+    "architecture_version": 2,
+    "vocab_size": 32768,
+    "max_seq_len": 2048,
+    "n_layers": 18,
+    "d_model": 640,
+    "d_ff": 3072,
+    "n_heads": 8,
+    "n_kv_heads": 2,
+    "head_dim": 64,
+    "local_window": 256,
+    "attention_pattern": "GGLLLGLLLGLLLGLLLG",
+    "global_nope": true,
+    "ple_dim": 64,
+    "dropout": 0.0,
+    "rope_base": 10000.0,
+    "rms_eps": 1e-06,
+    "attn_backend": "flash",
+    "loss_backend": "liger",
+    "ce_chunk_size": 2048,
+    "gradient_checkpointing": false
+  },
+  "seed": 1337,
+  "scratch": true,
+  "strict_model_load": true,
+  "finite_model_parameters": true
+}

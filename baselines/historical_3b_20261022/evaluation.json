@@ -1,0 +1,50 @@
+{
+  "checkpoint": "runs/3b_v2_muon_sampled_20261022_gpu0/final_l3_mix.pt",
+  "step": 18310,
+  "zero_shot": true,
+  "limit": null,
+  "dataset_revisions": {
+    "Rowan/hellaswag": "218ec52e09a7e7462a5400043bb9a69a41d06b76",
+    "baber/piqa": "142f6d7367fd9877f0fb3b5734ea6a545f54cdd1",
+    "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453"
+  },
+  "truncated_requests": 0,
+  "results": {
+    "hellaswag": {
+      "name": "hellaswag",
+      "alias": "hellaswag",
+      "sample_len": 10042,
+      "acc,none": 0.2960565624377614,
+      "acc_stderr,none": 0.004555832462774653,
+      "acc_norm,none": 0.32951603266281615,
+      "acc_norm_stderr,none": 0.004690768393854656
+    },
+    "piqa": {
+      "name": "piqa",
+      "alias": "piqa",
+      "sample_len": 1838,
+      "acc,none": 0.6414581066376496,
+      "acc_stderr,none": 0.011189212572356472,
+      "acc_norm,none": 0.6316648531011969,
+      "acc_norm_stderr,none": 0.011254089354334288
+    },
+    "arc_easy": {
+      "name": "arc_easy",
+      "alias": "arc_easy",
+      "sample_len": 2376,
+      "acc,none": 0.5458754208754208,
+      "acc_stderr,none": 0.010216507710243992,
+      "acc_norm,none": 0.476010101010101,
+      "acc_norm_stderr,none": 0.010247967392742701
+    },
+    "arc_challenge": {
+      "name": "arc_challenge",
+      "alias": "arc_challenge",
+      "sample_len": 1172,
+      "acc,none": 0.2235494880546075,
+      "acc_stderr,none": 0.012174896631202666,
+      "acc_norm,none": 0.2687713310580205,
+      "acc_norm_stderr,none": 0.012955065963710852
+    }
+  }
+}

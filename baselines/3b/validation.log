@@ -1,0 +1,20 @@
+{
+  "checkpoint": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/runs/assignment_baseline_3b_20261119/final_l3_mix.pt",
+  "checkpoint_sha256": "c548e59d86edd069cdfb2e1a7d30740590106d27a99b0970d33f93fef440905a",
+  "step": 18310,
+  "training_tokens": 2999910400,
+  "loss": 3.0082439556717873,
+  "perplexity": 20.251805613409555,
+  "full_vocabulary": true,
+  "sequences": 128,
+  "sequence_length": 2048,
+  "validation_tokens": 262144,
+  "validation_sha256": "cd9b0e5cbf20e45922905d249a1dfe397d66abe886aa622d2632eaeb604e81a8",
+  "tokenizer_sha256": "78025606dd6a505cd74f4b187866bf5540ee83239131aa2f1ddefdfd2e104272",
+  "batch_size": 20,
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "torch_version": "2.8.0+cu128",
+  "attention_backend": "flash",
+  "loss_backend": "liger"
+}

@@ -7,7 +7,7 @@ After cloning, run the commands below from the repository root, the directory co
 See [distribution and downloads](DISTRIBUTION.md) for the public GitHub repository, release, and download instructions. The repository includes the frozen validation file and tokenizer; it does not include the pretrained checkpoint files or training corpus.
 
 ```bash
-git clone --branch v1.0.2 https://github.com/spindro/miniple-challenge.git
+git clone --branch v1.1.0 https://github.com/spindro/miniple-challenge.git
 cd miniple-challenge
 python3 scripts/check_starter.py
 python3 scripts/verify_artifacts.py --checkpoints none
@@ -74,6 +74,7 @@ Run preparation separately so you can inspect the result before allocating a lon
 ```bash
 python -u prepare_data.py --out-dir data/ultrafineweb_3b
 python train.py --data-dir data/ultrafineweb_3b --validate-data-only
+(cd data/ultrafineweb_3b && sha256sum --check ../../baselines/3b/data.sha256)
 ```
 
 Preparation uses CPU, disk, and network access; it does not train or require a GPU. It streams the pinned L2/L3 source revisions, tokenizes documents, writes document-disjoint packed files and metadata, and checks that regenerated validation exactly matches the frozen reference. The second command verifies the prepared files on CPU before you start training. Preserve the resulting files and metadata for both control and candidate.
@@ -90,27 +91,27 @@ This reconstructs all 5,000,001 validation tokens and checks the full SHA256. It
 
 The default `scripts/train.sh` also performs full preparation automatically if the selected `DATA_DIR` has no metadata. It requires the bundled references and validates prepared data on CPU before querying or waiting for a GPU. Unlike the separate preparation command, it proceeds to training afterward. It uses `.venv/bin/python` unless `PYTHON` is set; activate that environment for standalone commands too.
 
-The fresh training corpus is **not byte-identical** to the historical corpus because the historical run reused specific older slices. Run an unchanged baseline on your reconstructed corpus before attributing gains to architecture or optimization. Historical plots/scores remain useful references; candidate and control must use the same reconstructed bytes. The frozen validation protocol stays unchanged. Use a new `--out-dir` for a changed preparation; existing metadata is protected against overwrite.
+For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. The hash list covers four training streams plus the frozen validation/tokenizer. Prepared metadata is retained as provenance and may contain machine-specific paths. The CPU validator alone checks lengths and frozen references; the separate SHA256 command establishes training-byte parity.
 
-## 5. Train the reference from scratch
+## 5. Train your candidate or reproduce the reference
 
-You can inspect the prepared data, model configuration, and CUDA availability with `bash scripts/debug.sh`. Start training after preparation and the CPU checks have completed:
+The published A/B reference need not be retrained after parity checks. Make and record your experimental change before launching your candidate, and use a fresh output directory. Running unchanged source is an optional reference reproduction when needed. Check configuration and CUDA availability with `bash scripts/debug.sh` before an allocated training job.
 
 ```bash
-GPU_ID=0 OUT_DIR=runs/my_baseline_3b bash scripts/train.sh
+GPU_ID=0 OUT_DIR=runs/my_candidate_3b bash scripts/train.sh
 ```
 
-Defaults: random initialization, seed 1337, 20 sequences per microbatch, four accumulation steps, 2048-token context, Muon plus AdamW, BF16, FlashAttention, Liger, compiled execution, and the 3B schedule. The historical run took about 11 hours after setup; hardware load, compilation, and storage affect this. First-use compilation takes time. Use a persistent session such as the course job scheduler or `tmux` for a long run.
+Defaults: random initialization, seed 1337, 20 sequences per microbatch, four accumulation steps, context 2048, Muon plus AdamW, BF16, FlashAttention, Liger, compiled execution, and the 3B schedule. See BASELINE.md for the measured assignment-run timing; other machines and compiler-cache states can differ. Use the course scheduler or a persistent session for long jobs.
 
 The launcher refuses to overwrite an existing run and waits if the selected GPU has a compute process. It does not reserve the GPU against another simultaneous launcher; follow the allocation system. An output-directory lock only protects that one directory.
 
 Inspect and plot a run:
 
 ```bash
-tail -n 20 runs/my_baseline_3b/train.log
-python loss_plots.py runs/my_baseline_3b
+tail -n 20 runs/my_candidate_3b/train.log
+python loss_plots.py runs/my_candidate_3b
 # Optional, ongoing refresh in another terminal:
-python loss_plots.py --watch runs/my_baseline_3b
+python loss_plots.py --watch runs/my_candidate_3b
 ```
 
 Outputs include `metrics.jsonl`, `status`, `train.log`, `latest.pt`, milestone checkpoints, and `final_l3_mix.pt`. The plotter writes `losses.png` and `losses.svg`. Start/validation/completion events and token counters are in the JSONL log.
@@ -120,13 +121,13 @@ To change optimizer, architecture, batch geometry, or validation behavior, edit 
 ## 6. Resume your own interrupted run
 
 ```bash
-GPU_ID=0 OUT_DIR=runs/my_baseline_3b bash scripts/train.sh \
-  --resume runs/my_baseline_3b/latest.pt
+GPU_ID=0 OUT_DIR=runs/my_candidate_3b bash scripts/train.sh \
+  --resume runs/my_candidate_3b/latest.pt
 ```
 
 Keep the original data, model, schedule, optimizer settings, output directory, and batch geometry. The loader/RNG/optimizer state is restored. The checkpoint can lag behind the log: preserve the original log, reconcile records after the saved step, and account for replayed compute before making plots or timing claims. The starter does not automatically repair duplicate log segments after a crash.
 
-Do not use `--resume` on a completed reference checkpoint to start SFT, change the dataset, or extend a zero-LR schedule. The reconstructed data differs from the historical data and has a different metadata fingerprint. E/F must load model weights into a deliberate new training stage with a fresh schedule and optimizer.
+Do not use `--resume` on a completed reference checkpoint to start SFT, change data, or extend a zero-LR schedule. E/F load model weights into a deliberate new stage with a fresh optimizer and schedule. Preserve data fingerprints when resuming your own interrupted run.
 
 ## 7. Evaluate a checkpoint
 
@@ -146,9 +147,9 @@ Full benchmark suite:
 ```bash
 python -m pip install -r requirements-eval.txt
 CUDA_VISIBLE_DEVICES=0 python scripts/evaluate.py \
-  --checkpoint runs/my_baseline_3b/final_l3_mix.pt \
+  --checkpoint runs/my_candidate_3b/final_l3_mix.pt \
   --data-dir baselines/validation --batch-size 8 \
-  --out runs/my_baseline_3b/evaluation.json
+  --out runs/my_candidate_3b/evaluation.json
 ```
 
 `--limit 2` is useful for a functional pilot only. Omit it for reported scores. This evaluator scores multiple-choice likelihoods; it does not implement IFEval, chat evaluation, or arbitrary Italian tasks. Extend it or add a separate evaluator for those tracks without changing the reference scoring.

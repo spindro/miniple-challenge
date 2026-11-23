@@ -1,0 +1,11 @@
+{
+  "approved": true,
+  "approved_by": "user",
+  "approved_at": "2026-11-23T08:17:58.296500+00:00",
+  "action": "shared_gpu1_evaluation",
+  "gpu_uuid": "GPU-f8bdb15e-74dd-4dd9-8d6b-a54083638d92",
+  "memory_fraction": 0.25,
+  "root": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1",
+  "user_instruction": "yes if you can",
+  "scope": "Final loss evaluation and all four benchmarks on GPU1 alongside the existing Isaac process, using a 6GiB PyTorch allocator cap; no other jobs stopped."
+}

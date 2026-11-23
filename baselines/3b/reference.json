@@ -1,0 +1,46 @@
+{
+  "run": "assignment_baseline_3b_20261119",
+  "source_commit": "ab78ea34b49edc000e8dc05128857ce6b036c721",
+  "training_tokens": 2999910400,
+  "completed_steps": 18310,
+  "parameters": 146496016,
+  "seed": 1337,
+  "checkpoint": {
+    "bytes": 1407273863,
+    "sha256": "c548e59d86edd069cdfb2e1a7d30740590106d27a99b0970d33f93fef440905a"
+  },
+  "loss": 3.0082439556717873,
+  "target_ce": 3.0082439556717873,
+  "perplexity": 20.251805613409555,
+  "target_source": "validation.json: post-training frozen evaluator, BF16, batch20",
+  "trainer_final_ce": 3.0082439556717873,
+  "trainer_evaluator_ce_delta": 0.0,
+  "maximum_allowed_ce_delta": 0.001,
+  "first_scheduled_training_crossing": {
+    "time_unix": 1795211523.6509871,
+    "event": "validation",
+    "step": 18310,
+    "tokens": 2999910400,
+    "loss": 3.0082439556717873,
+    "perplexity": 20.251805613409555,
+    "sequences": 128,
+    "full_vocabulary": true
+  },
+  "crossing_checkpoint_verified": false,
+  "training_launcher_wall_seconds": 38103.960063593,
+  "metric_training_wall_seconds": 38089.25274634361,
+  "preparation_wall_seconds": 8114.575557958102,
+  "prior_preparation_wall_seconds": 6299.1897986589465,
+  "total_preparation_wall_seconds": 14413.765356617048,
+  "prior_failed_preparation_attempts": 1,
+  "timing_note": "Launcher includes CPU preflight and any race-time queue; not saved-target time. Metric duration is wall-clock training-start to completion.",
+  "completed_at": "2026-11-23T08:23:48.387516+00:00",
+  "single_seed_development_result": true,
+  "post_training_evaluation": {
+    "training_gpu_uuid": "GPU-cfbe689d-b422-47e1-f640-5940af92cb57",
+    "evaluation_gpu_uuid": "GPU-f8bdb15e-74dd-4dd9-8d6b-a54083638d92",
+    "shared": true,
+    "pytorch_allocator_memory_fraction": 0.25,
+    "timing_is_training_speed_measurement": false
+  }
+}

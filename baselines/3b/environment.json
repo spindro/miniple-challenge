@@ -1,0 +1,35 @@
+{
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "executable": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+  "packages": {
+    "torch": "2.8.0+cu128",
+    "numpy": "2.5.3",
+    "datasets": "5.0.1",
+    "tokenizers": "0.23.2",
+    "pyarrow": "25.0.1",
+    "huggingface_hub": "1.33.0",
+    "fsspec": "2026.6.0",
+    "flash_attn": "2.8.3.post1",
+    "liger_kernel": "0.8.4",
+    "matplotlib": "3.11.2",
+    "lm_eval": null
+  },
+  "torch_cuda": "12.8",
+  "runtime_cache_environment": {
+    "HF_HOME": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/huggingface",
+    "HF_HUB_CACHE": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/huggingface/hub",
+    "HF_DATASETS_CACHE": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/huggingface/datasets",
+    "HF_XET_CACHE": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/huggingface/xet",
+    "HF_ASSETS_CACHE": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/huggingface/assets",
+    "XDG_CACHE_HOME": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/xdg",
+    "MPLCONFIGDIR": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/matplotlib",
+    "CUDA_CACHE_PATH": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/cuda",
+    "TMPDIR": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/tmp",
+    "TEMP": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/tmp",
+    "TMP": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/tmp",
+    "TORCH_EXTENSIONS_DIR": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/torch_extensions",
+    "TORCH_HOME": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/torch",
+    "TORCHINDUCTOR_CACHE_DIR": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/torchinductor",
+    "TRITON_CACHE_DIR": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/runtime_caches/triton"
+  }
+}

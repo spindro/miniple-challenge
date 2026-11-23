@@ -12,7 +12,7 @@ Read `README.md`, `docs/PROTOCOL.md`, the chosen section of `docs/TRACKS.md`, an
 ## Preserve the scientific comparison
 
 - A–D start from random weights. E/F adaptation loads the identified pretrained model weights and starts a deliberate new training stage. Never disguise pretrained initialization as scratch training.
-- The exact reference token budget is 2,999,910,400; the common target is full-vocabulary next-token CE 3.0081611946225166 on the frozen 128×2048 validation protocol.
+- The exact reference token budget is 2,999,910,400; the common target is full-vocabulary next-token CE 3.0082439556717873 on the frozen 128×2048 validation protocol.
 - Do not alter validation bytes, tokenizer, causal context, target alignment, task prompts, loss normalization, or benchmark examples to improve a score. Architecture adapters must preserve the scoring definition.
 - Count total model parameters, all experts/lookup tables/auxiliary heads, and repeated data exposures honestly. Log auxiliary prediction events and adaptation lineage separately.
 - Do not compare sampled-softmax loss or an auxiliary/composite loss directly with the frozen next-token CE. Report raw and normalized benchmark accuracy under their correct names.
@@ -30,7 +30,7 @@ Read `README.md`, `docs/PROTOCOL.md`, the chosen section of `docs/TRACKS.md`, an
 
 ## Verify before spending the budget
 
-Start with `python3 scripts/check_starter.py`. In an installed environment, run `python -m unittest discover -s tests -v`. Verify bundled validation/tokenizer files with `python3 scripts/verify_artifacts.py --checkpoints none`; after selecting a reference, use `--checkpoints 3b`, `50b`, or `all`. The verifier defaults to `none` and always checks frozen validation/tokenizer assets. Do not treat missing unselected checkpoint files as an error or download both by default. These commands do not launch GPU training. Follow `docs/SETUP.md` for CPU/network data preparation; do not launch the combined training command merely to obtain data. The reconstructed corpus differs from historical training slices, so use an unchanged control on the same reconstructed corpus for causal claims.
+Start with `python3 scripts/check_starter.py` and the CPU tests. Verify selected artifacts with `scripts/verify_artifacts.py`; `--checkpoints none` always checks frozen references. Follow SETUP.md to prepare data and check every canonical training-stream hash. For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change.
 
 For first-time setup, follow the sequence in `docs/SETUP.md`: install the provided requirements, verify the bundled references, prepare `data/ultrafineweb_3b`, and validate it with `python train.py --data-dir data/ultrafineweb_3b --validate-data-only` before training. The optional `python prepare_data.py --out-dir data/validation_check --check-validation-only` checks data access and reconstructs just the frozen validation stream on CPU/network; it does not prepare training data. Both preparation and the launcher require the bundled references.
 
@@ -38,7 +38,7 @@ For a substantive model/optimizer/data change, add a small relevant correctness 
 
 Check the existing GPU allocation and running jobs before using CUDA. Stay within the student's authorized budget. Once a specific run and resource budget are authorized, execute and monitor it without repeatedly asking for the same approval. Do not kill other jobs, change shared GPU power settings, or consume extra GPUs. If no compute allocation has been specified, continue code/CPU checks and ask for the missing allocation before a long GPU job.
 
-For speed claims, measure the matched reference and candidate using the same timer boundaries, compiler-cache policy, software and hardware. Include compilation, validation, checkpointing, and replayed work as specified in the protocol. Preserve interrupted logs and reconcile checkpoint steps before plotting; do not silently discard replayed cost.
+For speed claims, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. Include compilation, validation, checkpointing and replayed work as specified in the protocol. Preserve interrupted logs and reconcile steps before plotting.
 
 ## Communicate evidence
 

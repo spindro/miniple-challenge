@@ -1,0 +1,169 @@
+{
+  "state": "failed",
+  "stage": "prepare",
+  "started_at": "2026-11-19T13:26:37.027280+00:00",
+  "supervisor_pid": 4156097,
+  "supervisor_parent_pid": 4156095,
+  "root": "/media/nvme/spindro/miniple_assignment_baseline_20261119",
+  "source_commit": "ab78ea34b49edc000e8dc05128857ce6b036c721",
+  "gpu_uuid": "GPU-cfbe689d-b422-47e1-f640-5940af92cb57",
+  "stages": [
+    {
+      "name": "hardware",
+      "started_at": "2026-11-19T13:26:37.073751+00:00",
+      "state": "complete",
+      "command": [
+        "nvidia-smi",
+        "-q"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/hardware.log",
+      "pid": 4156099,
+      "process_group": 4156099,
+      "process_tree": [
+        "4156099 4156097 4156099       00:00 nvidia-smi"
+      ],
+      "last_checked_at": "2026-11-19T13:26:37.115340+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:37.331862+00:00",
+      "wall_seconds": 0.25556174805387855
+    },
+    {
+      "name": "environment",
+      "started_at": "2026-11-19T13:26:37.338171+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "-c",
+        "\nimport importlib.metadata as metadata, json, sys, torch\npackages = {}\nfor name in [\"torch\", \"numpy\", \"datasets\", \"tokenizers\", \"pyarrow\", \"huggingface_hub\",\n             \"fsspec\", \"flash_attn\", \"liger_kernel\", \"matplotlib\", \"lm_eval\"]:\n    try: packages[name] = metadata.version(name)\n    except metadata.PackageNotFoundError: packages[name] = None\nprint(json.dumps({\"python\": sys.version, \"executable\": sys.executable,\n                  \"packages\": packages, \"torch_cuda\": torch.version.cuda}, indent=2))\nif packages[\"datasets\"] != \"5.0.1\":\n    raise RuntimeError(\"The preparation environment must use datasets==5.0.1\")\n"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/environment.log",
+      "pid": 4156102,
+      "process_group": 4156102,
+      "process_tree": [
+        "4156102 4156097 4156102       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T13:26:37.379311+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:38.798382+00:00",
+      "wall_seconds": 1.4579515249934047
+    },
+    {
+      "name": "packages",
+      "started_at": "2026-11-19T13:26:38.804805+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "-c",
+        "\nimport importlib.metadata as metadata, importlib.util, json, sys\npackages = sorted([{\"name\": d.metadata.get(\"Name\", \"\"), \"version\": d.version,\n                    \"location\": str(d.locate_file(\"\"))} for d in metadata.distributions()],\n                  key=lambda row: (row[\"name\"].lower(), row[\"location\"]))\norigins = {}\nfor name in [\"torch\", \"datasets\", \"tokenizers\", \"flash_attn\", \"liger_kernel\", \"lm_eval\"]:\n    spec = importlib.util.find_spec(name)\n    origins[name] = spec.origin if spec else None\nprint(json.dumps({\"sys_path\": sys.path, \"module_origins\": origins, \"packages\": packages}, indent=2))\n"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/packages.log",
+      "pid": 4156109,
+      "process_group": 4156109,
+      "process_tree": [
+        "4156109 4156097 4156109       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T13:26:38.847489+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:38.964209+00:00",
+      "wall_seconds": 0.1569459328893572
+    },
+    {
+      "name": "source_manifest",
+      "started_at": "2026-11-19T13:26:38.972562+00:00",
+      "state": "complete",
+      "finished_at": "2026-11-19T13:26:39.052251+00:00",
+      "wall_seconds": 0.07745176507160068,
+      "files": 74
+    },
+    {
+      "name": "starter",
+      "started_at": "2026-11-19T13:26:39.054302+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "scripts/check_starter.py"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/starter.log",
+      "pid": 4156112,
+      "process_group": 4156112,
+      "process_tree": [
+        "4156112 4156097 4156112       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T13:26:39.097643+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:39.565101+00:00",
+      "wall_seconds": 0.508815233130008
+    },
+    {
+      "name": "verify_artifacts",
+      "started_at": "2026-11-19T13:26:39.568102+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "scripts/verify_artifacts.py",
+        "--checkpoints",
+        "none"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/verify_artifacts.log",
+      "pid": 4156165,
+      "process_group": 4156165,
+      "process_tree": [
+        "4156165 4156097 4156165       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T13:26:39.610259+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:39.676576+00:00",
+      "wall_seconds": 0.10592515906319022
+    },
+    {
+      "name": "tests",
+      "started_at": "2026-11-19T13:26:39.679790+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/tests.log",
+      "pid": 4156167,
+      "process_group": 4156167,
+      "process_tree": [
+        "4156167 4156097 4156167       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T13:26:39.721816+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T13:26:42.746325+00:00",
+      "wall_seconds": 3.0639051941689104
+    },
+    {
+      "name": "prepare",
+      "started_at": "2026-11-19T13:26:42.750004+00:00",
+      "state": "failed",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119/.venv/bin/python",
+        "-u",
+        "prepare_data.py",
+        "--out-dir",
+        "data/ultrafineweb_3b"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/prepare.log",
+      "pid": 4156202,
+      "process_group": 4156202,
+      "process_tree": [
+        "4156202 4156097 4156202    01:44:07 python"
+      ],
+      "last_checked_at": "2026-11-19T15:10:50.210895+00:00",
+      "exit_code": 1,
+      "finished_at": "2026-11-19T15:11:41.942086+00:00",
+      "wall_seconds": 6299.1897986589465
+    }
+  ],
+  "updated_at": "2026-11-19T15:11:41.955668+00:00",
+  "failed_at": "2026-11-19T15:11:41.955641+00:00",
+  "error": "prepare failed with exit 1; see /media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/prepare.log",
+  "recovery": "Manual review required; no automatic retry or resume"
+}

@@ -1,0 +1,300 @@
+{
+  "state": "running",
+  "stage": "wait_gpu_loss",
+  "started_at": "2026-11-19T16:52:16.634718+00:00",
+  "supervisor_pid": 144727,
+  "supervisor_parent_pid": 144725,
+  "root": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1",
+  "source_commit": "ab78ea34b49edc000e8dc05128857ce6b036c721",
+  "gpu_uuid": "GPU-cfbe689d-b422-47e1-f640-5940af92cb57",
+  "prior_preparation_wall_seconds": 6299.1897986589465,
+  "stages": [
+    {
+      "name": "preparation_history_manifest",
+      "started_at": "2026-11-19T16:52:16.670988+00:00",
+      "state": "complete",
+      "finished_at": "2026-11-19T16:52:16.675275+00:00",
+      "wall_seconds": 0.0021102630998939276,
+      "files": 1
+    },
+    {
+      "name": "hardware",
+      "started_at": "2026-11-19T16:52:16.680546+00:00",
+      "state": "complete",
+      "command": [
+        "nvidia-smi",
+        "-q"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/hardware.log",
+      "pid": 144731,
+      "process_group": 144731,
+      "process_tree": [
+        "144731  144727  144731       00:00 nvidia-smi"
+      ],
+      "last_checked_at": "2026-11-19T16:52:16.722797+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:16.989668+00:00",
+      "wall_seconds": 0.30730387195944786
+    },
+    {
+      "name": "environment",
+      "started_at": "2026-11-19T16:52:16.995044+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-c",
+        "\nimport importlib.metadata as metadata, json, sys, torch\npackages = {}\nfor name in [\"torch\", \"numpy\", \"datasets\", \"tokenizers\", \"pyarrow\", \"huggingface_hub\",\n             \"fsspec\", \"flash_attn\", \"liger_kernel\", \"matplotlib\", \"lm_eval\"]:\n    try: packages[name] = metadata.version(name)\n    except metadata.PackageNotFoundError: packages[name] = None\nprint(json.dumps({\"python\": sys.version, \"executable\": sys.executable,\n                  \"packages\": packages, \"torch_cuda\": torch.version.cuda}, indent=2))\nif packages[\"datasets\"] != \"5.0.1\":\n    raise RuntimeError(\"The preparation environment must use datasets==5.0.1\")\n"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/environment.log",
+      "pid": 144738,
+      "process_group": 144738,
+      "process_tree": [
+        "144738  144727  144738       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T16:52:17.032176+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:20.306877+00:00",
+      "wall_seconds": 3.309608541894704
+    },
+    {
+      "name": "packages",
+      "started_at": "2026-11-19T16:52:20.312736+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-c",
+        "\nimport importlib.metadata as metadata, importlib.util, json, sys\npackages = sorted([{\"name\": d.metadata.get(\"Name\", \"\"), \"version\": d.version,\n                    \"location\": str(d.locate_file(\"\"))} for d in metadata.distributions()],\n                  key=lambda row: (row[\"name\"].lower(), row[\"location\"]))\norigins = {}\nfor name in [\"torch\", \"datasets\", \"tokenizers\", \"flash_attn\", \"liger_kernel\", \"lm_eval\"]:\n    spec = importlib.util.find_spec(name)\n    origins[name] = spec.origin if spec else None\nprint(json.dumps({\"sys_path\": sys.path, \"module_origins\": origins, \"packages\": packages}, indent=2))\n"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/packages.log",
+      "pid": 144796,
+      "process_group": 144796,
+      "process_tree": [
+        "144796  144727  144796       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T16:52:20.347545+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:20.513767+00:00",
+      "wall_seconds": 0.19894786598160863
+    },
+    {
+      "name": "source_manifest",
+      "started_at": "2026-11-19T16:52:20.521657+00:00",
+      "state": "complete",
+      "finished_at": "2026-11-19T16:52:20.631006+00:00",
+      "wall_seconds": 0.10673282900825143,
+      "files": 74
+    },
+    {
+      "name": "starter",
+      "started_at": "2026-11-19T16:52:20.633270+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "scripts/check_starter.py"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/starter.log",
+      "pid": 144798,
+      "process_group": 144798,
+      "process_tree": [
+        "144798  144727  144798       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T16:52:20.668959+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:21.035569+00:00",
+      "wall_seconds": 0.40014880103990436
+    },
+    {
+      "name": "verify_artifacts",
+      "started_at": "2026-11-19T16:52:21.038200+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "scripts/verify_artifacts.py",
+        "--checkpoints",
+        "none"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/verify_artifacts.log",
+      "pid": 144851,
+      "process_group": 144851,
+      "process_tree": [
+        "144851  144727  144851       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T16:52:21.077284+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:21.143738+00:00",
+      "wall_seconds": 0.10326546407304704
+    },
+    {
+      "name": "tests",
+      "started_at": "2026-11-19T16:52:21.147268+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/tests.log",
+      "pid": 144854,
+      "process_group": 144854,
+      "process_tree": [
+        "144854  144727  144854       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T16:52:21.179699+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T16:52:25.304007+00:00",
+      "wall_seconds": 4.154520246898755
+    },
+    {
+      "name": "prepare",
+      "started_at": "2026-11-19T16:52:25.307761+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-u",
+        "prepare_data.py",
+        "--out-dir",
+        "data/ultrafineweb_3b"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/prepare.log",
+      "pid": 144912,
+      "process_group": 144912,
+      "process_tree": [
+        "144912  144727  144912    02:15:09 python"
+      ],
+      "last_checked_at": "2026-11-19T19:07:34.607034+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T19:07:39.885589+00:00",
+      "wall_seconds": 8114.575557958102
+    },
+    {
+      "name": "validate_data",
+      "started_at": "2026-11-19T19:07:39.888818+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-u",
+        "train.py",
+        "--data-dir",
+        "data/ultrafineweb_3b",
+        "--validate-data-only"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/validate_data.log",
+      "pid": 255872,
+      "process_group": 255872,
+      "process_tree": [
+        "255872  144727  255872       00:00 python"
+      ],
+      "last_checked_at": "2026-11-19T19:07:39.930163+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-19T19:07:43.404015+00:00",
+      "wall_seconds": 3.5128227691166103
+    },
+    {
+      "name": "data_manifest",
+      "started_at": "2026-11-19T19:07:43.408732+00:00",
+      "state": "complete",
+      "finished_at": "2026-11-19T19:07:56.189385+00:00",
+      "wall_seconds": 12.777032493147999,
+      "files": 7
+    },
+    {
+      "name": "wait_not_before",
+      "started_at": "2026-11-19T19:07:56.191661+00:00",
+      "state": "complete",
+      "not_before": "2026-11-19T20:00:00+01:00",
+      "finished_at": "2026-11-19T19:07:56.193848+00:00",
+      "wall_seconds": 1.630210317671299e-05
+    },
+    {
+      "name": "wait_gpu_training",
+      "started_at": "2026-11-19T19:07:56.195965+00:00",
+      "state": "complete",
+      "gpu": "GPU-cfbe689d-b422-47e1-f640-5940af92cb57, NVIDIA GeForce RTX 3090",
+      "observed_compute_pids": "",
+      "last_checked_at": "2026-11-20T11:17:07.395765+00:00",
+      "finished_at": "2026-11-20T11:17:07.450457+00:00",
+      "wall_seconds": 58151.25238262792
+    },
+    {
+      "name": "training",
+      "started_at": "2026-11-20T11:17:07.454425+00:00",
+      "state": "complete",
+      "command": [
+        "bash",
+        "scripts/train.sh"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/training.log",
+      "pid": 832453,
+      "process_group": 832453,
+      "process_tree": [
+        "832453  144727  832453    10:34:32 bash",
+        "832469  832453  832453    10:34:29 python",
+        "832470  832453  832453    10:34:29 tee",
+        "832501  832469  832453    10:34:25 python",
+        "832525  832501  832453    10:34:22 python",
+        "832527  832501  832453    10:34:22 python",
+        "832529  832501  832453    10:34:22 python",
+        "832531  832501  832453    10:34:22 python"
+      ],
+      "last_checked_at": "2026-11-20T21:51:39.989627+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-20T21:52:11.417833+00:00",
+      "wall_seconds": 38103.960063593
+    },
+    {
+      "name": "plots",
+      "started_at": "2026-11-20T21:52:11.466881+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "loss_plots.py",
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/runs/assignment_baseline_3b_20261119"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/plots.log",
+      "pid": 1441004,
+      "process_group": 1441004,
+      "process_tree": [
+        "1441004  144727 1441004       00:00 python"
+      ],
+      "last_checked_at": "2026-11-20T21:52:11.503514+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-20T21:52:14.727244+00:00",
+      "wall_seconds": 3.258075654041022
+    },
+    {
+      "name": "checkpoint_check",
+      "started_at": "2026-11-20T21:52:14.782633+00:00",
+      "state": "complete",
+      "command": [
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/.venv/bin/python",
+        "-c",
+        "\nimport json, math, sys, torch\nfrom pathlib import Path\nfrom model import MiniPLE, MiniPLEConfig\ncheckpoint, destination = map(Path, sys.argv[1:])\nstate = torch.load(checkpoint, map_location=\"cpu\", weights_only=False)\nrequired = {\"model\", \"optimizer\", \"step\", \"loader_states\", \"args\", \"schedule\",\n            \"model_config\", \"scaler\", \"torch_rng\", \"numpy_rng\", \"python_rng\", \"cuda_rng\"}\nif not required.issubset(state): raise RuntimeError(\"Incomplete full training checkpoint\")\nschedule = state[\"schedule\"]\nsteps = int(state[\"step\"]) + 1\ntokens = steps * int(schedule[\"tokens_per_step\"])\nif (steps, tokens) != (18310, 2999910400): raise RuntimeError(\"Wrong final training budget\")\nif int(schedule[\"total_steps\"]) != steps or int(schedule[\"total_scheduled_tokens\"]) != tokens:\n    raise RuntimeError(\"Checkpoint schedule was not completed\")\nif state[\"args\"].get(\"resume\") or state[\"args\"][\"seed\"] != 1337:\n    raise RuntimeError(\"Expected a seed1337 scratch run\")\nif state[\"optimizer\"].get(\"muon_version\") != 1 or \"adamw\" not in state[\"optimizer\"]:\n    raise RuntimeError(\"Missing full Muon/AdamW optimizer state\")\ncfg = MiniPLEConfig.from_checkpoint(state[\"model_config\"])\ncfg.attn_backend = \"sdpa\"\ncfg.loss_backend = \"chunked\"\nmodel = MiniPLE(cfg)\nmodel.load_state_dict(state[\"model\"], strict=True)\nif not all(torch.isfinite(p).all().item() for p in model.parameters()):\n    raise RuntimeError(\"Non-finite model parameters\")\nreport = {\"checkpoint\": str(checkpoint), \"completed_steps\": steps, \"training_tokens\": tokens,\n          \"parameters\": sum(p.numel() for p in model.parameters()), \"schedule\": schedule,\n          \"model_config\": state[\"model_config\"], \"seed\": state[\"args\"][\"seed\"],\n          \"scratch\": True, \"strict_model_load\": True, \"finite_model_parameters\": True}\ndestination.write_text(json.dumps(report, indent=2) + \"\\n\")\nprint(json.dumps(report, indent=2))\n",
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/runs/assignment_baseline_3b_20261119/final_l3_mix.pt",
+        "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/checkpoint_report.json"
+      ],
+      "log": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/artifacts/checkpoint_check.log",
+      "pid": 1441024,
+      "process_group": 1441024,
+      "process_tree": [
+        "1441024  144727 1441024       00:00 python"
+      ],
+      "last_checked_at": "2026-11-20T21:52:14.830251+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-11-20T21:52:20.357284+00:00",
+      "wall_seconds": 5.57152918796055
+    },
+    {
+      "name": "wait_gpu_loss",
+      "started_at": "2026-11-20T21:52:20.417176+00:00",
+      "state": "running",
+      "gpu": "GPU-cfbe689d-b422-47e1-f640-5940af92cb57, NVIDIA GeForce RTX 3090",
+      "observed_compute_pids": "1114017\n3305654",
+      "last_checked_at": "2026-11-23T08:18:09.591008+00:00"
+    }
+  ],
+  "updated_at": "2026-11-23T08:18:09.591035+00:00"
+}

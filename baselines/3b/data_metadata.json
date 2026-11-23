@@ -1,0 +1,85 @@
+{
+  "vocab_size": 32768,
+  "dtype": "uint16",
+  "bos_token_id": 32759,
+  "document_delimiter": "<|bos|>",
+  "format_version": 2,
+  "tokenizer": {
+    "family": "nanochat",
+    "vocab_size": 32768,
+    "source_kind": "explicit_local_json",
+    "source_repo": null,
+    "source_revision": null,
+    "source_path": "/media/nvme/spindro/miniple_assignment_baseline_20261119_retry1/baselines/validation/tokenizer.json",
+    "local_file": "tokenizer.json",
+    "sha256": "78025606dd6a505cd74f4b187866bf5540ee83239131aa2f1ddefdfd2e104272",
+    "training_corpus": "~2B characters of NVIDIA ClimbMix pretraining data"
+  },
+  "packing": {
+    "document_delimiter": "<|bos|>",
+    "split_documents_across_output_files": false,
+    "extra_next_token_label": true,
+    "note": "Document tails are dropped at output-file boundaries to prevent train/validation leakage."
+  },
+  "stage1_tokens": 2100000000,
+  "decay_tokens": 900000000,
+  "mix_start_tokens": 1500000000,
+  "val_tokens": 5000000,
+  "curriculum": {
+    "stage1": "100% Ultra-FineWeb L2 English for first half",
+    "stable_l3_mix": {
+      "Ultra-FineWeb L2": 0.75,
+      "Ultra-FineWeb-L3 English QA Synthetic": 0.125,
+      "Ultra-FineWeb-L3 English Multi-Style Synthetic": 0.125
+    },
+    "decay_l3_mix": {
+      "Ultra-FineWeb L2": 0.5,
+      "Ultra-FineWeb-L3 English QA Synthetic": 0.25,
+      "Ultra-FineWeb-L3 English Multi-Style Synthetic": 0.25
+    }
+  },
+  "datasets": {
+    "l2": {
+      "dataset": "openbmb/Ultra-FineWeb",
+      "revision": "02c85641e3d19a854be2e09139c25adaa9518063",
+      "split": "en",
+      "text_field": "content"
+    },
+    "l3": {
+      "dataset": "openbmb/Ultra-FineWeb-L3",
+      "revision": "bc3b1ba986fcaef6871b9790a413b16267c2de0f",
+      "qa_config": "Ultra-FineWeb-L3-en-QA-Synthetic",
+      "style_config": "Ultra-FineWeb-L3-en-Multi-Style-Synthetic",
+      "text_field": "content"
+    }
+  },
+  "files": {
+    "val_l2.bin": 5000001,
+    "stage1_l2.bin": 1500000001,
+    "decay_l2.bin": 901000001,
+    "decay_l3_qa.bin": 301000001,
+    "decay_l3_style.bin": 301000001
+  },
+  "seed": 1337,
+  "preparation": {
+    "packages": {
+      "datasets": "5.0.1",
+      "numpy": "2.5.3",
+      "tokenizers": "0.23.2",
+      "huggingface_hub": "1.33.0",
+      "pyarrow": "25.0.1",
+      "fsspec": "2026.6.0"
+    },
+    "shuffle_buffer": 20000,
+    "max_buffer_input_shards": 10,
+    "encode_batch_size": 128,
+    "parquet_reader": {
+      "batch_size": 2000,
+      "columns": "configured text field only",
+      "pre_buffer": false,
+      "use_buffered_stream": true,
+      "buffer_size": 65536
+    }
+  },
+  "validation_reference_sha256": "cd9b0e5cbf20e45922905d249a1dfe397d66abe886aa622d2632eaeb604e81a8"
+}

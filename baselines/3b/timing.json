@@ -1,0 +1,14 @@
+{
+  "training_launcher_wall_seconds": 38103.960063593,
+  "training_started_at": "2026-11-20T11:17:07.454425+00:00",
+  "training_finished_at": "2026-11-20T21:52:11.417833+00:00",
+  "preparation_wall_seconds": 8114.575557958102,
+  "prior_preparation_wall_seconds": 6299.1897986589465,
+  "total_preparation_wall_seconds": 14413.765356617048,
+  "not_before_wait_seconds": 1.630210317671299e-05,
+  "gpu_queue_before_training_seconds": 58151.25238262792,
+  "metric_training_wall_seconds": 38089.25274634361,
+  "compiler_cache_policy": "Cold dedicated TorchInductor and Triton cache directories, created immediately before training.",
+  "training_timer_boundary": "Training launcher wall time includes its CPU preflight, any race-time GPU queue, compilation, evaluation and checkpoint writes; preparation and prior queue are separate.",
+  "metric_timer_boundary": "Trainer start event after setup to complete event after final checkpoint; excludes initial model/compiler-wrapper setup."
+}

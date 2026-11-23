@@ -1,0 +1,54 @@
+{
+  "evaluation.json": {
+    "bytes": 1605,
+    "sha256": "aa1b78a8aaec4631dc051f3d513fcd3d2a7fccf42aca3295e66ecadfbb670ffb"
+  },
+  "final_l3_mix.pt": {
+    "bytes": 1407273863,
+    "sha256": "c548e59d86edd069cdfb2e1a7d30740590106d27a99b0970d33f93fef440905a"
+  },
+  "job.lock": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "latest.pt": {
+    "bytes": 1407269387,
+    "sha256": "24680cba40ea87c06006c875fd81bb619ad4e405473a3e9fb8e9dd26ef4d36ce"
+  },
+  "losses.png": {
+    "bytes": 115871,
+    "sha256": "810a0aeac770fa4f015c14367410fb02cabbdc9434f2bd50de736f1824c14116"
+  },
+  "losses.svg": {
+    "bytes": 115984,
+    "sha256": "ff8eeb8aa80e0865d70c0fd03aa2ed52fae847cf6171d5bff43510633e053fe5"
+  },
+  "metrics.jsonl": {
+    "bytes": 761284,
+    "sha256": "f8950b3b17f5935892a2d73b8133a34c7f9a1b95b31179149ac577611173a768"
+  },
+  "mix_start.pt": {
+    "bytes": 1407271625,
+    "sha256": "a16f3d049879c060856e9c7754aff96e832769b4737af280c2785bb70ef64b34"
+  },
+  "prepare.log": {
+    "bytes": 141,
+    "sha256": "b59c01fe2e719175aa267f11137d9f76e5f591116ac16d2dd815fed2843a7b44"
+  },
+  "stage1_end.pt": {
+    "bytes": 1407272371,
+    "sha256": "a9e3cca410c0e674a2b4f4c1d2c53600ef829b6dd21d001d0566b252c64afa32"
+  },
+  "status": {
+    "bytes": 9,
+    "sha256": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+  },
+  "train.log": {
+    "bytes": 343025,
+    "sha256": "476f2f003db78847ec843ff30629067b69905ad03685685599b5f148812bcb98"
+  },
+  "validation.json": {
+    "bytes": 794,
+    "sha256": "c399c4ee6346ecc68ada5777dda63d163a1b855e84ffbe4c09e55227daeecf06"
+  }
+}

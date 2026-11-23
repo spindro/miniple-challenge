@@ -1,0 +1,10 @@
+{
+  "preparation_attempt1/prepare.log": {
+    "bytes": 2156363,
+    "sha256": "a039172b813ed7c0a8f03f5f616f7b017a74eda0cfd92937aac837d359dac157"
+  },
+  "preparation_attempt1/status.json": {
+    "bytes": 7120,
+    "sha256": "96ca053fe35c5b27fa8fc89b73c5751ca65dc3c3d7fe3b0c5ddac27bd6acca87"
+  }
+}

@@ -1,0 +1,3 @@
+# Historical 3B run — 22 October 2026
+
+These records are preserved byte-for-byte from the original assignment release. They describe different training slices from the current assignment control. The original full checkpoint remains the `miniple-3b.pt` asset in release v1.0. Its SHA256 is `3b9c1ed9daff59f26beb115bb4631aa0ec802171832a6d44493609d40d766e4a`. `checkpoint_manifest_original.json` is the original root manifest, including its original relative names; the checkpoint is not included in Git. `BASELINE_original.txt` preserves the historical description verbatim, with paths referring to its original checkout.

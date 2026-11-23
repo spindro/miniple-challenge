@@ -1,0 +1,38 @@
+{
+  "evaluation_continuation/after_benchmarks_gpu.json": {
+    "bytes": 300,
+    "sha256": "39ee575093c53cd6c47cd13b5a01142131d4e8cb22c0745fc2491fb560622c8e"
+  },
+  "evaluation_continuation/after_validation_gpu.json": {
+    "bytes": 300,
+    "sha256": "8a94f3ddb81793e4dae3e722cb66464943e5c134ceeb7e4775f3eabd99fc0742"
+  },
+  "evaluation_continuation/approval.json": {
+    "bytes": 506,
+    "sha256": "4634e63c1a229085809aae9fa1bce9f0bbd0116779ac16caf885faad5225a8ef"
+  },
+  "evaluation_continuation/before_benchmarks_gpu.json": {
+    "bytes": 300,
+    "sha256": "e42f353598f229c38034b4807ae7ebf05925090c25dbc6fdcee22c90d6f4d433"
+  },
+  "evaluation_continuation/before_validation_gpu.json": {
+    "bytes": 300,
+    "sha256": "5eca6e777fee80254a4b889704f26e5cc03afa59c6c6942176b5d428ce23a796"
+  },
+  "evaluation_continuation/finish_evaluation.py": {
+    "bytes": 16047,
+    "sha256": "4c2c7e051d986dde74eb15e7a9ef84003dd8080e19b4c3c5042c77c481aef83f"
+  },
+  "evaluation_continuation/status_after_stop.json": {
+    "bytes": 14253,
+    "sha256": "86a5b5544afe96b99910af6d665c57283b6d9d948d8af308c97d3d63a452ade3"
+  },
+  "evaluation_continuation/status_before_stop.json": {
+    "bytes": 14033,
+    "sha256": "1b9d1a565aeffc7c107a8516060040ee84c0e354b6decbe2f3a54f522fd9d5e4"
+  },
+  "evaluation_plan.json": {
+    "bytes": 1131,
+    "sha256": "dfd709f62da7b60b94dd48bddb2f324edbd2dbc32c7c3950d082311761a5624f"
+  }
+}

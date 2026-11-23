@@ -6,9 +6,9 @@ Build and test an improvement to a **146,496,016-parameter language model** on *
 
 ## Source code and optional checkpoints
 
-Get the source from the public [spindro/miniple-challenge repository](https://github.com/spindro/miniple-challenge) and the optional checkpoints from [release v1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.0). The source checkout includes code, documents, historical results, and the **frozen validation file and tokenizer**. The two full training checkpoints are separate release assets. **Scratch training needs neither checkpoint.** Training data is reconstructed locally and is not distributed.
+Get the source from the public [spindro/miniple-challenge repository](https://github.com/spindro/miniple-challenge) and the optional checkpoints from [release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). The source checkout includes code, documents, assignment and historical results, and the **frozen validation file and tokenizer**. The two full training checkpoints are separate release assets. **Scratch training needs neither checkpoint.** Training data is reconstructed locally and is not distributed.
 
-Start with **source release v1.0.2** and follow [the installation guide](docs/SETUP.md): create the environment, verify the bundled references, prepare the training data, and launch your first experiment. The supplied requirements include the verified data-preparation dependency, `datasets==5.0.1`.
+Start with **source release v1.1.0** and follow [the installation guide](docs/SETUP.md): create the environment, verify the bundled references, prepare the training data, and launch your first experiment. The supplied requirements include the verified data-preparation dependency, `datasets==5.0.1`.
 
 Follow [the download and distribution guide](docs/DISTRIBUTION.md). No GitHub account or invitation is required to download the public assignment. Download only what your experiment uses:
 
@@ -27,7 +27,7 @@ The downloader reads its repository and release tag from `distribution.json` and
 | Track | Main question | Starting point | Primary result |
 |---|---|---|---|
 | A — Quality at equal tokens | Can you learn a better model from the same token budget? | Random initialization | Lower fixed held-out next-token loss at 2,999,910,400 tokens |
-| B — Token efficiency | Can you reach the baseline quality with fewer tokens? | Random initialization | Fewer tokens to validation loss ≤ 3.0081611946225166 |
+| B — Token efficiency | Can you reach the baseline quality with fewer tokens? | Random initialization | Fewer tokens to validation loss ≤ 3.0082439556717873 |
 | C — Training speed | Can you reach that quality sooner on one 3090? | Random initialization | Less elapsed training time to the same target |
 | D — Data mixtures | Can better data selection or ordering improve learning? | Random initialization | A declared A, B, or C objective, with the model recipe controlled |
 | E — Instruction tuning | Can you turn the 50B base model into a useful instruction follower? | Supplied 50B checkpoint | Held-out instruction-following quality and retained base capabilities |
@@ -52,7 +52,7 @@ The [classroom presentation](presentation/README.md) includes an editable PowerP
 On the allocated Linux machine, clone the assignment and prepare the environment and data:
 
 ```bash
-git clone --branch v1.0.2 https://github.com/spindro/miniple-challenge.git
+git clone --branch v1.1.0 https://github.com/spindro/miniple-challenge.git
 cd miniple-challenge
 python3 scripts/check_starter.py
 python3 scripts/verify_artifacts.py --checkpoints none
@@ -61,24 +61,25 @@ source .venv/bin/activate
 python -m unittest discover -s tests -v
 python -u prepare_data.py --out-dir data/ultrafineweb_3b
 python train.py --data-dir data/ultrafineweb_3b --validate-data-only
+(cd data/ultrafineweb_3b && sha256sum --check ../../baselines/3b/data.sha256)
 ```
 
-After preparation completes, start the baseline on your allocated GPU:
+After preparation and parity checks, make and record your experimental change before launching your candidate on an allocated GPU. Reproducing the unchanged baseline is optional when the supplied control meets your track's parity conditions:
 
 ```bash
-GPU_ID=0 OUT_DIR=runs/my_baseline_3b bash scripts/train.sh
+GPU_ID=0 OUT_DIR=runs/my_candidate_3b bash scripts/train.sh
 ```
 
-Preparation uses CPU, network, and disk; it can take substantial time before token progress appears. The training command starts the roughly 11-hour historical workload on a 3090. Follow the course GPU allocation and [setup guide](docs/SETUP.md). Run an unchanged control on your prepared corpus before attributing improvements to architecture: the historical run used different training slices.
+Preparation uses CPU, network, and disk. For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. See [the baseline](docs/BASELINE.md) and [setup](docs/SETUP.md).
 
 ## Supplied reference results
 
 | Reference | Parameters | Predicted training tokens | Fixed L2 validation CE ↓ | Perplexity ↓ |
 |---|---:|---:|---:|---:|
-| 3B | 146,496,016 | 2,999,910,400 | 3.008161 | 20.250130 |
+| Assignment 3B | 146,496,016 | 2,999,910,400 | 3.008244 | 20.251806 |
 | 50B | 146,496,016 | 49,999,872,000 | 2.799718 | 16.440013 |
 
-![Original 3B training and validation curves](baselines/3b/losses.png)
+![Assignment 3B training and validation curves](baselines/3b/losses.png)
 
 The training plot includes sampled-softmax objectives with different candidate counts. Their losses are diagnostic curves; **the common comparison metric is full-vocabulary next-token cross-entropy on the frozen validation set**. Auxiliary MTP or MoE losses must be reported separately.
 
@@ -93,10 +94,13 @@ scripts/                  Install, train, check, evaluate, generate
 distribution.json         Repository and release used by the checkpoint downloader
 tests/                    Small CPU checks for the added loss evaluator
 data/ultrafineweb_3b/      Created locally by prepare_data.py; not distributed
-baselines/3b/             Original results/provenance; optional downloaded checkpoint
+baselines/3b/             Assignment control, canonical data hashes, optional checkpoint
+baselines/historical_3b_20261022/  Archived original 3B evidence
 baselines/50b/            Original results/provenance; optional downloaded checkpoint
 baselines/validation/     Frozen validation set and tokenizer, included in Git
 runs/                     Your experiments; create a fresh directory for each run
 ```
 
 The default size band is **131,846,415–161,145,617 total parameters** (±10%). Every stored expert and learned lookup entry counts. See the protocol for tied weights, auxiliary heads, and adaptation tracks. Dates, team size, and the available GPU-hour budget are supplied by the instructor; no deadline or allocation is implied by these files.
+
+The supplied A/B control need not be retrained when the documented parity conditions hold. The classroom slides retain historical reference figures; this README and the protocol define the current target.

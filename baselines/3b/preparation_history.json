@@ -1,0 +1,22 @@
+{
+  "attempts": [
+    {
+      "root": "/media/nvme/spindro/miniple_assignment_baseline_20261119",
+      "state": "failed",
+      "stage": "prepare",
+      "started_at": "2026-11-19T13:26:37.027280+00:00",
+      "failed_at": "2026-11-19T15:11:41.955641+00:00",
+      "error": "prepare failed with exit 1; see /media/nvme/spindro/miniple_assignment_baseline_20261119/artifacts/prepare.log",
+      "cause": "OSError122home-directoryquotaexceededwhilecreatingHuggingFaceL3cache",
+      "preparation_wall_seconds": 6299.1897986589465,
+      "training_started": false,
+      "preserved_files": {
+        "val_l2.bin": 10000002,
+        "stage1_l2.bin": 3000000002,
+        "tokenizer.json": 3865175,
+        "decay_l2.bin": 1802000002
+      }
+    }
+  ],
+  "recovery": "FreshcompletepreparationwithunchangedpublishedsourceandNVMe-onlyruntimecaches;priorattemptleftintact"
+}

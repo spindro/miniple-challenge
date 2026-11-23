@@ -6,7 +6,7 @@ Choose one primary track. You may report secondary benefits, but decide what wou
 
 **Question:** Does your architecture or optimization change extract more useful learning from the same data exposure?
 
-Start from random initialization. Reconstruct the training corpus with the supplied code, then keep its bytes, tokenizer, context, and mixture fixed unless you explicitly choose the data-mixture track. Train for exactly **2,999,910,400 predicted tokens** and compare the final checkpoint's full-vocabulary validation CE with an unchanged control trained on that same reconstructed corpus. Report **3.0081611946225166** as the historical reference too, while acknowledging its different training slices. Also show the whole loss-versus-tokens curve and the four base-model benchmarks. Lower training loss alone is insufficient: a changed objective or easier examples can reduce it without improving the model.
+Start from random initialization. Train for exactly **2,999,910,400 predicted tokens** and compare final full-vocabulary validation CE with the supplied assignment control (**3.0082439556717873**). For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. Show the complete loss-versus-tokens curve and all four base benchmarks. Lower training loss alone does not establish better generalization.
 
 Possible experiments:
 
@@ -22,7 +22,7 @@ Possible experiments:
 
 **Question:** Can your model reach the 3B baseline's validation quality with fewer training-token exposures?
 
-Start from scratch. The target is **CE ≤ 3.0081611946225166** under the frozen evaluator. Your score is the number of consumed predicted tokens at the first scheduled validation that meets it. If it never meets the target, report “not reached,” the token budget, and the best observed CE. Do not interpolate between evaluation points and call that an observed crossing.
+Start from scratch. The target is **CE ≤ 3.0082439556717873** under the frozen evaluator. Your score is the consumed tokens at the first scheduled validation meeting it; save that checkpoint and corroborate it with the same frozen batch-20 evaluator used for the reference. A confirmation does not create an extra unscheduled crossing opportunity. If the target is missed, report not reached, the budget and best observed CE. Do not interpolate a crossing.
 
 Consider a shorter, deliberately designed training schedule; better optimization; architecture changes; or extra prediction objectives. A shorter run needs its own warmup and cooldown plan. Stopping the original schedule early and comparing it against a fully cooled-down run answers a different question. Report how schedules differ.
 
@@ -36,7 +36,7 @@ Start from scratch on **one RTX 3090, 24 GB**. Reach the same CE target as B. Re
 
 Ideas include better batching, fused operations, compile settings, memory layout, optimizer implementation, sampling overhead, attention kernels, and parameter-budget-compatible architecture changes. Preserve correct losses and gradients. Check numerical changes against a small reference calculation before a long run.
 
-Run the starter reference and candidate under matched conditions on the allocated machine. The primary timer includes process/setup time, compilation, training data stalls, validation, and checkpoint work. Report a secondary timer from the first update for comparison with historical logs. See [timing rules](PROTOCOL.md#timing-and-hardware) for cache state and interruptions. Published H100 speedrun numbers are inspiration, not the comparison baseline.
+Use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. The primary timer includes setup, compilation, data stalls, validation and checkpoint work. Report the secondary trainer-start timer separately. A first-crossing comparison needs a reference with compatible qualifying-checkpoint evidence and save policy. See [timing rules](PROTOCOL.md#timing-and-hardware). H100 speedrun numbers are inspiration, not a 3090 timing reference.
 
 **Minimum evidence:** matched baseline and candidate time-to-target, loss-versus-time and loss-versus-tokens, peak allocated/reserved memory, measured throughput, correctness checks, exact hardware/software and cache conditions.
 
@@ -44,7 +44,7 @@ Run the starter reference and candidate under matched conditions on the allocate
 
 **Question:** Which training examples, mixture weights, or ordering make this model learn more effectively?
 
-Choose A, B, or C as the primary objective and label the result **data track**. Keep the baseline architecture, optimizer, and schedule fixed in the first controlled experiment. Change one data factor: L2/QA/style proportions, curriculum order, filtering, deduplication, or a documented bounded educational/domain subset. A later combined model-and-data experiment needs separate ablations.
+Choose A, B, or C as the primary objective and label the result **data track**. Keep architecture, optimizer, and schedule fixed initially. Change one data factor: mixture, curriculum, filtering, deduplication, or a documented domain subset. The supplied default-data baseline can be the reference arm when its other conditions match; otherwise run the needed unchanged control. Combined data/model changes require separate ablations.
 
 Use the same tokenizer and unchanged validation set. Publish source names, revisions, licenses/terms, selection rules, mixture percentages by token count, unique versus repeated exposures, and data-preparation cost. Keep validation and benchmark documents out of the training set, including near duplicates or transformed copies. External synthetic data must disclose its generator and cost; do not quietly add teacher supervision to a pure pretraining comparison.
 

@@ -38,7 +38,7 @@
   },
   "evaluation": {
     "final_ce": null,
-    "target_ce": 3.0081611946225166,
+    "target_ce": 3.0082439556717873,
     "target_reached": null,
     "preceding_evaluation": null,
     "qualifying_evaluation": null,

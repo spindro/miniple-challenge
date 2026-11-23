@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-11-23T08:19:45.515911+00:00",
+  "gpu_index": 1,
+  "gpu_uuid": "GPU-f8bdb15e-74dd-4dd9-8d6b-a54083638d92",
+  "name": "NVIDIA GeForce RTX 3090",
+  "memory_total_mib": 24576.0,
+  "memory_free_mib": 21927.0,
+  "utilization_percent": 1.0,
+  "compute_processes": "1114017, 2134"
+}

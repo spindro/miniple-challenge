@@ -1,4 +1,4 @@
-# Reference model and historical results
+# Assignment baseline and historical references
 
 ## Architecture and recipe
 
@@ -40,36 +40,42 @@ The aggregate 3B exposure is approximately 80% L2, 10% QA, and 10% style. Exact 
 | `decay_l3_qa.bin` | 299,991,040 |
 | `decay_l3_style.bin` | 299,991,040 |
 
-The table describes the historical run; training files are not distributed. Students reconstruct training data with the supplied code. Each prepared stream needs an additional next-token label. The original full 5,000,001-token validation stream and tokenizer remain in `baselines/validation/`, with their own hash manifest. `baselines/3b/data_metadata_original.json` and `historical_data_manifest.json` preserve the historical data provenance and consumed-prefix hashes for audit, not a list of included training files. The default fresh corpus uses different training slices; compare changes with a matched fresh control.
+The table describes the unchanged assignment recipe. The completed assignment run used the exact freshly prepared default corpus. Compare all four complete training files with `baselines/3b/data.sha256`; validation and tokenizer bytes remain fixed. Prepared-file lengths include margins beyond consumed tokens. Metadata and full data hashes are retained alongside the run. The original training slices and source are archived under `baselines/historical_3b_20261022/`. For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change.
 
 ## Results
 
-| Metric | 3B reference | 50B reference |
+| Metric | Assignment 3B | Historical 50B |
 |---|---:|---:|
 | Predicted training tokens | 2,999,910,400 | 49,999,872,000 |
-| Final fixed L2 CE | 3.0081611946225166 | 2.7997181564569473 |
-| Final fixed L2 perplexity | 20.250129622081722 | 16.44001260667217 |
-| HellaSwag `acc_norm` | 32.95% | 39.23% |
-| PIQA `acc` | 64.15% | 67.95% |
-| ARC-Easy `acc` | 54.59% | 58.38% |
-| ARC-Challenge `acc_norm` | 26.88% | 27.65% |
+| Final fixed L2 CE | 3.0082439556717873 | 2.7997181564569473 |
+| Final fixed L2 perplexity | 20.251805613409555 | 16.44001260667217 |
+| HellaSwag `acc_norm` | 32.60% | 39.23% |
+| PIQA `acc` | 64.85% | 67.95% |
+| ARC-Easy `acc` | 54.63% | 58.38% |
+| ARC-Challenge `acc_norm` | 26.37% | 27.65% |
 
-Both final validation results were the best recorded for their respective runs. The 50B run used the same architecture, with schedule boundaries scaled to 25B for mixing and 35B for cooldown/full softmax. It resumed from a saved checkpoint after a power interruption. Its training history is supplied for study, not as a one-segment speed baseline.
+The assignment target is the final checkpoint's frozen batch-20 BF16 evaluator result. Raw trainer validation and its numerical difference are recorded in `reference.json`. This is a single-seed development-set result. The 50B comparison is descriptive: training data, budget, and schedule differ.
 
-Benchmark results cover all 15,428 examples: HellaSwag 10,042, PIQA 1,838, ARC-Easy 2,376, ARC-Challenge 1,172. They are zero-shot multiple-choice likelihood evaluations with no request truncation and no example limit. The pinned harness commit is `d6de81643928d653435c431bae19945d41d32520`. Exact scores, standard errors, dataset revisions, and environment details are in each `evaluation.json` and `evaluation_metadata.json`.
+All four zero-shot benchmarks use the complete pinned task definitions (15,428 expected examples), with no limit and zero truncated requests. Reported sample counts are checked when present; they are not independently counted when the harness omits them. Exact scores, standard errors, pinned dataset revisions, evaluator source and package versions accompany the raw outputs.
 
-The original 3B run logged about **11h 00m 35s** from the training-start event to completion, including first-use training compilation, validation, and checkpoint writes, but excluding earlier setup. The metadata's `elapsed_seconds` field is the **benchmark evaluation duration**, not training time. Use `training_duration_seconds` for that historical figure. A fair speed comparison requires a matched reference rerun.
+The assignment run took **38103.960 seconds** from launcher start through exit, including CPU preflight and any race-time GPU queue. Trainer-start to completion was **38089.253 seconds** by log timestamps. Preparation and earlier queueing are separate. Use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. See `timing.json` and the protocol.
+
+Total preparation time was **14413.765 seconds**: 8114.576 seconds for the successful preparation plus 6299.190 seconds across 1 earlier failed preparation attempts. This preprocessing cost is reported separately and excluded from the GPU training timer.
+The failed attempt records and their original preserved-file locations are documented in `preparation_history.json`. Training had not started in those attempts; their cost is not hidden in the successful run's timing.
+The original failed preparation log and supervisor status are preserved under `baselines/3b/preparation_attempt1/`, with their SHA256 manifest alongside the successful-run provenance.
+
+Post-training frozen loss and benchmarks ran on shared GPU 1 with a 25% PyTorch allocator memory limit, after the GPU 0 wait ended by authorized reallocation. Training itself ran on GPU 0; its original timing record is unchanged. Evaluator elapsed times and the later queue wait are excluded from training-speed measurements. The plan, approval, original status snapshots and GPU observations are preserved in the evaluation-continuation evidence.
 
 ## Reference checkpoints
 
 | Checkpoint | Bytes | SHA256 |
 |---|---:|---|
-| `baselines/3b/final_l3_mix.pt` | 1,407,273,735 | `3b9c1ed9daff59f26beb115bb4631aa0ec802171832a6d44493609d40d766e4a` |
+| `baselines/3b/final_l3_mix.pt` | 1,407,273,863 | `c548e59d86edd069cdfb2e1a7d30740590106d27a99b0970d33f93fef440905a` |
 | `baselines/50b/final_l3_mix.pt` | 1,407,273,863 | `957249a427b31e4237063cdc70d789551da6971c3da106a27a8c623d043a7898` |
 
-These are full original training checkpoints, including model weights/configuration, optimizer, schedule, and RNG/loader state. They are suitable for scoring and as the model-weight source for adaptation. Their completed schedules and historical data fingerprints are not new-stage training recipes.
+These are full training checkpoints, including optimizer and RNG/loader state. Completed pretraining schedules are not SFT recipes: adaptation loads model weights into a new training stage.
 
-The student source preserves the model/optimizer/evaluator implementation and makes 3B defaults explicit. It also contains later resume/data-handling safeguards and an added fixed-loss evaluator. It is not claimed to be a byte-identical copy of the historical launch source. The original source manifest and the 3B `source_at_launch.tar.gz` are included for audit; the current handout has its own source manifest. Do not execute the historical launcher as the student default.
+The assignment control ran source commit `ab78ea34b49edc000e8dc05128857ce6b036c721`. Its source archive, manifest, launch plan, environment, data metadata and hashes are included in `baselines/3b/`. The original 3B source and measurements remain in [the historical archive](../baselines/historical_3b_20261022/README.md); the original v1.0 release remains available. The classroom presentation retains historical figures; this document and PROTOCOL.md define the current assignment reference.
 
 ## How to interpret the curves
 

@@ -35,3 +35,5 @@ Report total GPU-hours and all attempted runs, preprocessing/teacher cost, inher
 ## Artifact index and references
 
 List raw logs, configuration, manifests, plots, evaluations, checkpoints/adapters and their hashes, code, and the sources used.
+
+When using the supplied assignment control for A/B, cite its checkpoint/source and canonical training hashes, document parity, and label it as supplied rather than a run you performed. Use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. D may use the supplied default-data reference arm when other conditions match; its comparison must isolate the data change.
