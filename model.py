@@ -134,7 +134,6 @@ class GQAAttention(nn.Module):
         self.norm = nn.RMSNorm(cfg.d_model, eps=cfg.rms_eps)
         self.q_width = cfg.n_heads * cfg.head_dim
         self.kv_width = cfg.n_kv_heads * cfg.head_dim
-        # Fused query, key, and value projection.
         self.qkv_proj = nn.Linear(
             cfg.d_model,
             self.q_width + 2 * self.kv_width,

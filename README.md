@@ -4,11 +4,11 @@ Build and test an improvement to a **146,496,016-parameter language model** on *
 
 **3B and 50B refer to training tokens, not model parameters.** Both supplied checkpoints have the same 146.5M-parameter architecture. The default command trains a new model from random initialization for approximately 3B tokens. It does not load either supplied checkpoint.
 
-## Source code and optional checkpoints
+## Source, prepared data, and optional checkpoints
 
-Get the source from the public [spindro/miniple-challenge repository](https://github.com/spindro/miniple-challenge) and the optional checkpoints from [release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). The source checkout includes code, documents, assignment and historical results, and the **frozen validation file and tokenizer**. The two full training checkpoints are separate release assets. **Scratch training needs neither checkpoint.** Training data is reconstructed locally and is not distributed.
+Get the source from the public [spindro/miniple-challenge repository](https://github.com/spindro/miniple-challenge) and the optional checkpoints from [release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). The source checkout includes code, documents, assignment and historical results, and the **frozen validation file and tokenizer**. The two full training checkpoints are separate release assets. **Scratch training needs neither checkpoint.** Download the prepared **3B training data** as three separate assets from [data release `data-3b-v1`](https://github.com/spindro/miniple-challenge/releases/tag/data-3b-v1). Training data is kept out of Git. See [downloads and attribution](docs/DISTRIBUTION.md).
 
-Start with **source release v1.1.0** and follow [the installation guide](docs/SETUP.md): create the environment, verify the bundled references, prepare the training data, and launch your first experiment. The supplied requirements include the verified data-preparation dependency, `datasets==5.0.1`.
+Start with the **current main branch** and follow [the installation guide](docs/SETUP.md): create the environment, verify the bundled references, download and validate the prepared 3B data, then launch your candidate experiment. Source tag `v1.1.0` predates the data downloader; the checkpoint release remains `v1.1.0`. The supplied requirements include the verified data-preparation dependency, `datasets==5.0.1`.
 
 Follow [the download and distribution guide](docs/DISTRIBUTION.md). No GitHub account or invitation is required to download the public assignment. Download only what your experiment uses:
 
@@ -52,14 +52,14 @@ The [classroom presentation](presentation/README.md) includes an editable PowerP
 On the allocated Linux machine, clone the assignment and prepare the environment and data:
 
 ```bash
-git clone --branch v1.1.0 https://github.com/spindro/miniple-challenge.git
+git clone https://github.com/spindro/miniple-challenge.git
 cd miniple-challenge
 python3 scripts/check_starter.py
 python3 scripts/verify_artifacts.py --checkpoints none
 bash scripts/install.sh
 source .venv/bin/activate
 python -m unittest discover -s tests -v
-python -u prepare_data.py --out-dir data/ultrafineweb_3b
+python scripts/download_data.py
 python train.py --data-dir data/ultrafineweb_3b --validate-data-only
 (cd data/ultrafineweb_3b && sha256sum --check ../../baselines/3b/data.sha256)
 ```
@@ -70,7 +70,7 @@ After preparation and parity checks, make and record your experimental change be
 GPU_ID=0 OUT_DIR=runs/my_candidate_3b bash scripts/train.sh
 ```
 
-Preparation uses CPU, network, and disk. For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. See [the baseline](docs/BASELINE.md) and [setup](docs/SETUP.md).
+The prepared corpus is about **6.02 GB**, split into three roughly **2.01 GB** downloads. Allow about **12 GB free** during download/extraction, plus environment and checkpoint space; installed data uses about 6 GB. Reconstruction from pinned upstream sources remains an [alternative](docs/SETUP.md#alternative-reconstruct-from-upstream-sources). For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. See [the baseline](docs/BASELINE.md) and [setup](docs/SETUP.md).
 
 ## Supplied reference results
 
@@ -92,8 +92,9 @@ templates/                Proposal, report, and machine-readable result template
 model.py, train.py, ...   Editable training implementation
 scripts/                  Install, train, check, evaluate, generate
 distribution.json         Repository and release used by the checkpoint downloader
-tests/                    Small CPU checks for the added loss evaluator
-data/ultrafineweb_3b/      Created locally by prepare_data.py; not distributed
+data_distribution.json    Separate prepared-data release and integrity manifest
+tests/                    CPU checks for loss, data, and artifact integrity
+data/ultrafineweb_3b/      Downloaded prepared 3B corpus; excluded from Git
 baselines/3b/             Assignment control, canonical data hashes, optional checkpoint
 baselines/historical_3b_20261022/  Archived original 3B evidence
 baselines/50b/            Original results/provenance; optional downloaded checkpoint

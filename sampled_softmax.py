@@ -34,7 +34,6 @@ import numpy as np
 # k * NEGATIVE_STRIDE mod V visits every vocabulary row exactly once per cycle.
 NEGATIVE_STRIDE = 20_011
 
-# Exact candidate widths used by the merged PR #360 implementation.
 PR360_CANDIDATE_COUNTS = (10_240, 14_336, 24_576)
 
 # The upstream PR #360 benchmark changed widths at approximately these fractions of its main

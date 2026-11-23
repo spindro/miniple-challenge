@@ -65,7 +65,6 @@ def parse_args():
     p.add_argument("--check-validation-only", action="store_true",
                    help="Reconstruct and check only the 5M-token validation stream; no training corpus")
 
-    # Public dataset names/configs as of Sep 2026.
     p.add_argument("--l2-dataset", default="openbmb/Ultra-FineWeb")
     p.add_argument("--l2-revision", default="02c85641e3d19a854be2e09139c25adaa9518063",
                    help="Pinned L2 dataset revision used by the course baseline")
@@ -139,7 +138,6 @@ def extract_text(row: dict, preferred: str) -> str:
     if isinstance(value, str) and value.strip():
         return value
 
-    # Makes the script resilient to modest schema changes.
     for key in ("content", "text", "synthetic", "output", "document"):
         value = row.get(key)
         if isinstance(value, str) and value.strip():

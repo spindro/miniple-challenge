@@ -1,23 +1,39 @@
-# Source repository and optional model downloads
+# Source, prepared data, and optional model downloads
 
-The public source repository is [spindro/miniple-challenge](https://github.com/spindro/miniple-challenge). Download the assignment from [source release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). Optional checkpoint assets are hosted in [GitHub Release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). Downloads require no GitHub account or invitation.
+The public source repository is [spindro/miniple-challenge](https://github.com/spindro/miniple-challenge). Clone the current main branch for the prepared-data downloader; source tag `v1.1.0` predates that helper. Optional checkpoint assets are hosted in [GitHub Release v1.1.0](https://github.com/spindro/miniple-challenge/releases/tag/v1.1.0). Downloads require no GitHub account or invitation.
 
 ## What comes from Git
 
 The source checkout contains editable training code, student documents, agent instructions, tests, historical metrics/plots/benchmark results, checkpoint hash manifests, and the frozen files under `baselines/validation/`, including `val_l2.bin` and `tokenizer.json`.
 
-It excludes full model checkpoints, generated training data, and student experiment outputs. **The default scratch-training workflow needs no pretrained checkpoint.** Prepare training data from the pinned sources using [SETUP.md](SETUP.md).
+It excludes full model checkpoints, generated training data, and student experiment outputs. **The default scratch-training workflow needs no pretrained checkpoint.** Use the separate prepared-data download below; reconstruction from pinned sources remains an alternative in [SETUP.md](SETUP.md).
 
-Clone the course release and verify the included reference files:
+Clone the current course source and verify the included reference files:
 
 ```bash
-git clone --branch v1.1.0 https://github.com/spindro/miniple-challenge.git
+git clone https://github.com/spindro/miniple-challenge.git
 cd miniple-challenge
 python3 scripts/check_starter.py
 python3 scripts/verify_artifacts.py --checkpoints none
 ```
 
 A GitHub source archive is also usable: extract it and run commands from its root directory. Release checkpoint assets are separate from source archives.
+
+## Prepared 3B training data
+
+The independent [data release `data-3b-v1`](https://github.com/spindro/miniple-challenge/releases/tag/data-3b-v1) uses the same repository as the checkpoints. It contains the **exact prepared 3B corpus** in three roughly equal **2.01 GB** parts, about **6.02 GB** in total. The four training streams, validation file, tokenizer and original metadata match the supplied assignment control. No 50B training corpus is included.
+
+From the current source checkout, run:
+
+```bash
+python scripts/download_data.py
+python train.py --data-dir data/ultrafineweb_3b --validate-data-only
+(cd data/ultrafineweb_3b && sha256sum --check ../../baselines/3b/data.sha256)
+```
+
+`data_distribution.json` identifies the data release and ordered part names/hashes; `baselines/3b/data_manifest.json` supplies the canonical extracted-file hashes. The downloader verifies the parts and extracted files before installing `data/ultrafineweb_3b/`. Keep this corpus unchanged for controlled A–C comparisons. Use separate directories for reconstruction or changed Track D data. Keep the parts and extracted data out of Git. Completed parts are cached next to the target in `.ultrafineweb_3b.download` for retries and removed after a successful install. An existing target is accepted only when all seven files already match; otherwise it is preserved and the command fails. Use `--data-dir PATH` for a different destination.
+
+Allow about **12 GB free during download/extraction** and about **6 GB for the installed data**, plus environment and model/checkpoint storage. The data release tag is independent of `distribution.json`: model downloads continue to use checkpoint release **v1.1.0**. The seven-file data archive preserves the exact baseline bytes; [upstream notices](DATA_ATTRIBUTION.md) and license copies under `docs/licenses/` accompany it as separate small source/release files.
 
 ## Choose only the weights you need
 
@@ -96,7 +112,8 @@ For the 3B reference, select `miniple-3b.pt`, install it at `baselines/3b/final_
 - Preserve existing source attributions and notices when preparing another release.
 - Include the frozen validation/tokenizer files in Git and retain their hash manifest.
 - Upload the unchanged full checkpoints with exactly the asset names above.
-- Keep generated training data and experiment outputs out of the repository and release.
+- Keep generated data and experiment outputs out of Git. Publish only the verified prepared 3B corpus as the three assets in its separate data release; do not add extra corpus variants or a 50B corpus.
+- Distribute `DATA_ATTRIBUTION.md` and the files under `docs/licenses/` alongside the data parts. Preserve all seven archive members unchanged, including metadata. Verify each part against `data_distribution.json` and all seven extracted files against `baselines/3b/data_manifest.json`.
 - From a clean source checkout, verify `--checkpoints none`, download each asset separately, and verify the corresponding selection. Check the actual public or authenticated access path chosen for students.
 - Announce the repository, release tag, access requirements, and compute allocation.
 

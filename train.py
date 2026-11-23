@@ -90,8 +90,6 @@ class MemmapTokenLoader:
         )
         self.pos += batch_size * self.seq_len
 
-        # The packed stream lets us form B independent T-token rows without a
-        # Python loop: y is simply x shifted by one token in the flat stream.
         chunk_cpu = torch.from_numpy(chunk)
         if self.device.type == "cuda":
             chunk_cpu = chunk_cpu.pin_memory()
@@ -505,7 +503,6 @@ def main():
     prepared_files = meta.get("files", {})
     ckpt = None
     if args.resume is not None:
-        # Check optimizer format before constructing the model.
         ckpt = torch.load(args.resume, map_location="cpu", weights_only=False)
         if ckpt.get("optimizer", {}).get("muon_version") != 1:
             raise ValueError("Resume requires a MuonAdamW v1 checkpoint")
@@ -908,7 +905,6 @@ def main():
             )
             print(f"saved data-mixture branch checkpoint: {branch_path}")
 
-        # Save the learning-rate cooldown point once.
         if step + 1 == stage1_steps:
             branch_path = args.out_dir / "stage1_end.pt"
             save_checkpoint(

@@ -61,3 +61,9 @@ The adopted final CE is 3.0082439556717873, with perplexity 20.251805613409555. 
 Preparation cost totals 14413.765 seconds, including 6299.190 seconds from 1 preserved prior failures before training started. It is excluded from training timing and reported separately in `baselines/3b/reference.json`.
 
 Post-training frozen loss and benchmarks ran on shared GPU 1 with a 25% PyTorch allocator memory limit, after the GPU 0 wait ended by authorized reallocation. Training itself ran on GPU 0; its original timing record is unchanged. Evaluator elapsed times and the later queue wait are excluded from training-speed measurements. The plan, approval, original status snapshots and GPU observations are preserved in the evaluation-continuation evidence. See `baselines/3b/evaluation_plan.json` and `evaluation_continuation_manifest.json`.
+
+## Prepared 3B download packaging — 23 November 2026
+
+- Streamed the seven canonical prepared files from the completed assignment run into a USTAR archive, split into exactly three parts: 2,010,000,000, 2,010,000,000 and 1,999,880,960 bytes. Every archived file matches `baselines/3b/data_manifest.json`, including the original metadata.
+- All 44 CPU unit tests passed on local Python 3.12, including 15 downloader fixtures covering corruption, incomplete downloads and retries, archive safety, disk space, existing-data preservation, and failed-install cleanup. Starter and frozen-reference checks passed.
+- Tested the real installer on all three full-size local parts, verified all seven installed SHA256s independently, repeated installation without network access, and passed the real `train.py --validate-data-only` preflight. This used no GPU and did not reconstruct or retrain the model.

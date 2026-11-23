@@ -7,7 +7,6 @@ from typing import Tuple
 from huggingface_hub import hf_hub_download
 from tokenizers import Tokenizer
 
-# Fixed course tokenizer.
 # This is a Hugging Face conversion of the nanochat 32,768-token BPE tokenizer
 # trained on ~2B characters of the ClimbMix pretraining corpus. We pin the
 # repository revision so every student uses exactly the same tokenization.
@@ -56,9 +55,6 @@ def load_fixed_nanochat_tokenizer(
       3) download the pinned tokenizer.json from Hugging Face once and copy it
          into local_dir.
 
-    The prepared course dataset therefore becomes self-contained: after the
-    instructor runs prepare_data.py, students do not need to train or download
-    any tokenizer.
     """
 
     local_dir = Path(local_dir)

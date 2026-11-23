@@ -1,0 +1,21 @@
+{
+  "repository": "spindro/miniple-challenge",
+  "release": "data-3b-v1",
+  "parts": [
+    {
+      "name": "miniple-data-3b.tar.part01",
+      "bytes": 2010000000,
+      "sha256": "efce117aa626c72d013b45d6530805f9ee173f5081f700c0f0c773aaf16df215"
+    },
+    {
+      "name": "miniple-data-3b.tar.part02",
+      "bytes": 2010000000,
+      "sha256": "89397d93d3d4f6555e8427b4ed651dcec37a3648eb997ede9ad3d9092bced56f"
+    },
+    {
+      "name": "miniple-data-3b.tar.part03",
+      "bytes": 1999880960,
+      "sha256": "ec6da831efe64206f3bc2686ec1d5485328f604b8ae1400c715788ff666396ce"
+    }
+  ]
+}

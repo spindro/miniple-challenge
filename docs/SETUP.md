@@ -7,7 +7,7 @@ After cloning, run the commands below from the repository root, the directory co
 See [distribution and downloads](DISTRIBUTION.md) for the public GitHub repository, release, and download instructions. The repository includes the frozen validation file and tokenizer; it does not include the pretrained checkpoint files or training corpus.
 
 ```bash
-git clone --branch v1.1.0 https://github.com/spindro/miniple-challenge.git
+git clone https://github.com/spindro/miniple-challenge.git
 cd miniple-challenge
 python3 scripts/check_starter.py
 python3 scripts/verify_artifacts.py --checkpoints none
@@ -15,7 +15,7 @@ python3 scripts/verify_artifacts.py --checkpoints none
 
 This standard-library check validates syntax and 3B defaults and exercises the launcher with inert stand-ins. It neither downloads data nor starts training. Read `AGENTS.md`, [the track briefs](TRACKS.md), and [the protocol](PROTOCOL.md).
 
-**No pretrained checkpoint is needed for the default scratch run.** Each optional reference checkpoint is about 1.4 GB; obtain only the one needed for reference evaluation or adaptation. Allow roughly 6 GB for the prepared default training corpus, additional space for dataset/download caches and the environment, and several roughly 1.4 GB output checkpoints per experiment. The frozen validation/tokenizer reference is included in the source checkout. **Training data is not included:** students download and tokenize it with the supplied preparation code.
+**No pretrained checkpoint is needed for the default scratch run.** Each optional reference checkpoint is about 1.4 GB; obtain only the one needed for reference evaluation or adaptation. Allow about **12 GB free during prepared-data download/extraction** and about **6.02 GB for the installed corpus**, plus the environment and several roughly 1.4 GB output checkpoints per experiment. The frozen validation/tokenizer reference is included in Git. The exact prepared **3B corpus** is a separate three-part release; no 50B training corpus is distributed. See [download details](DISTRIBUTION.md).
 
 ## 2. Install on Linux x86_64 with Python 3.12
 
@@ -67,31 +67,45 @@ python3 scripts/verify_artifacts.py --checkpoints 50b
 
 Use `--checkpoint all` and `--checkpoints all` only when both references are needed. Downloads use `distribution.json` and write to `baselines/3b/final_l3_mix.pt` or `baselines/50b/final_l3_mix.pt`. Both are **full training checkpoints**, preserving their original optimizer/RNG state and hashes. They have not been converted into weights-only exports. See [distribution](DISTRIBUTION.md) for repository/tag overrides and private-release access.
 
-## 4. Reconstruct training data
+## 4. Download the exact prepared 3B data
 
-Run preparation separately so you can inspect the result before allocating a long training job:
+Download and verify the exact corpus used by the supplied assignment baseline:
 
 ```bash
-python -u prepare_data.py --out-dir data/ultrafineweb_3b
+python scripts/download_data.py
 python train.py --data-dir data/ultrafineweb_3b --validate-data-only
 (cd data/ultrafineweb_3b && sha256sum --check ../../baselines/3b/data.sha256)
 ```
 
-Preparation uses CPU, disk, and network access; it does not train or require a GPU. It streams the pinned L2/L3 source revisions, tokenizes documents, writes document-disjoint packed files and metadata, and checks that regenerated validation exactly matches the frozen reference. The second command verifies the prepared files on CPU before you start training. Preserve the resulting files and metadata for both control and candidate.
+The downloader installs into `data/ultrafineweb_3b/` using the independent `data-3b-v1` release configured in `data_distribution.json`. It downloads three roughly 2.01 GB parts and verifies their hashes and the seven extracted files. The corpus contains four packed training streams, frozen validation, the tokenizer, and the original `metadata.json`; preserve all seven files unchanged. It contains only the default 3B data, including the token margins recorded in the baseline manifest. No model checkpoint is needed for scratch training.
 
-The bundled tokenizer and validation files are the defaults for both standalone preparation and the training launcher. Missing or modified references fail before dataset downloads. Preparation prints package versions and shuffle settings and shows progress for each output file. It reads only the configured text column with buffered Parquet I/O. Initial streaming needs to fetch large source chunks and fill the 20,000-document shuffle buffer before token progress appears; this can take minutes and transfer much more than the 10 MB validation output.
+The CPU validator checks prepared-file lengths and frozen references. The separate SHA256 command confirms the four training streams as well as validation/tokenizer against the published control. The launcher detects the downloaded metadata and proceeds without reconstructing data. It still runs its CPU checks before querying or waiting for a GPU.
 
-For an optional data-access check before full preparation, reconstruct only the validation stream:
+For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. The hash list covers four training streams plus the frozen validation/tokenizer. Prepared metadata is retained as provenance and may contain machine-specific paths. The CPU validator alone checks lengths and frozen references; the separate SHA256 command establishes training-byte parity.
+
+### Alternative: reconstruct from upstream sources
+
+Reconstruction remains available for studying preparation, independently reproducing the data, or developing a Track D experiment. It uses CPU, disk and network, and needs additional upstream dataset-cache space. The pinned `datasets==5.0.1` environment is required. Use a separate directory so the downloaded reference remains intact:
+
+```bash
+python -u prepare_data.py --out-dir data/ultrafineweb_3b_rebuilt
+python train.py --data-dir data/ultrafineweb_3b_rebuilt --validate-data-only
+(cd data/ultrafineweb_3b_rebuilt && sha256sum --check ../../baselines/3b/data.sha256)
+```
+
+For a run using this rebuilt copy, add `DATA_DIR=data/ultrafineweb_3b_rebuilt` to the training command below. Preparation streams pinned L2/L3 revisions, tokenizes and packs documents, preserves document boundaries between files, and verifies that regenerated validation matches the frozen reference. Source metadata paths may differ from the downloaded baseline metadata; compare training bytes, and keep each run's original resume fingerprint.
+
+Preparation prints package versions and shuffle settings. It reads only the configured text column with buffered Parquet I/O. Initial streaming can take minutes and fetch large source chunks before the 20,000-document shuffle buffer produces token progress. The bundled tokenizer and validation are required by both standalone preparation and the launcher.
+
+For a smaller upstream-access check, reconstruct only the frozen validation stream:
 
 ```bash
 python -u prepare_data.py --out-dir data/validation_check --check-validation-only
 ```
 
-This reconstructs all 5,000,001 validation tokens and checks the full SHA256. It uses CPU/network and can take minutes, but never loads L3 data or starts training. It creates no training metadata; use a separate directory for full preparation.
+This checks all 5,000,001 validation tokens and creates no training metadata. It is unnecessary when using the verified prepared-data download. If `DATA_DIR` has no metadata, `scripts/train.sh` still performs full preparation automatically and then starts training; use standalone preparation when you want to inspect the result first.
 
-The default `scripts/train.sh` also performs full preparation automatically if the selected `DATA_DIR` has no metadata. It requires the bundled references and validates prepared data on CPU before querying or waiting for a GPU. Unlike the separate preparation command, it proceeds to training afterward. It uses `.venv/bin/python` unless `PYTHON` is set; activate that environment for standalone commands too.
-
-For A/B, you may use the supplied assignment baseline as the unchanged control without retraining it after all four full training-stream SHA256s match its canonical data manifest. Keep the frozen tokenizer/validation, source order, mixture, token accounting and seed 1337 fixed, and disclose software and numerical differences. Otherwise run an unchanged control on your corpus. For C, use the supplied timing only when the documented hardware, software, cache state, timer boundaries and comparison endpoint match; otherwise run a matched reference. The supplied complete-run endpoint is not a verified earliest saved time-to-target. For D, the supplied default-data run may be the control arm when other conditions match; otherwise run a control that isolates the intentional data change. The hash list covers four training streams plus the frozen validation/tokenizer. Prepared metadata is retained as provenance and may contain machine-specific paths. The CPU validator alone checks lengths and frozen references; the separate SHA256 command establishes training-byte parity.
+For **Track D**, prepare the intentionally changed corpus in a new directory such as `data/my_mixture`, preserve the frozen tokenizer/validation, and pass `DATA_DIR=data/my_mixture` to the launcher. Record changed sources, revisions, selection/order/mixture and costs. Intentionally changed training bytes will not match the default hash manifest; retain their own hashes and the control required by [the protocol](PROTOCOL.md).
 
 ## 5. Train your candidate or reproduce the reference
 
